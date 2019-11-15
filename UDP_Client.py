@@ -10,15 +10,17 @@ UDP_PORT = 5005
 seq=0
 ack=0
 received_ack=-1
+received_seq =0
 unpacker = struct.Struct('I I 32s')
 
 print("UDP target IP:", UDP_IP)
 print("UDP target port:", UDP_PORT)
+print("\n")
 
 data_to_send = ('NCC-1701','NCC-1422','NCC-1017')
 
 for data in data_to_send:
-
+    
     data_bytes = data.encode("utf-8")
     
     #Create the Checksum
@@ -41,11 +43,14 @@ for data in data_to_send:
 
     data, addr = sock.recvfrom(1024)
     UDP_Packet_Data_rcv = unpacker.unpack(data)
+    print("Receieved ACK")
     print("Packet received:",UDP_Packet_Data_rcv)
+    print("----------------------------------------------")
+
+    received_seq = UDP_Packet[1]
 
     received_ack =UDP_Packet_Data_rcv[0]
-
-    while received_ack != ack:
+    while received_ack == 0:
         print("Packet Corrupted: ACKs do not match")
       
         sock.sendto(UDP_Packet,(UDP_IP,UDP_PORT))
@@ -57,10 +62,6 @@ for data in data_to_send:
         print("Packet Receieved: ",resp)
 
 
-    if received_ack==1:
-        ack=0
-    else:
-        ack=1
 
 
 sock.close()
