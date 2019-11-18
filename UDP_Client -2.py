@@ -41,7 +41,7 @@ for data in data_to_send:
     check=0
 
     try:
-        sock.settimeout(0.09)
+        sock.settimeout(0.001)
 
         data, addr = sock.recvfrom(1024)
 

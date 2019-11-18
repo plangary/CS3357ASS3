@@ -65,6 +65,7 @@ while True:
         resp = (1,UDP_Packet[1],respChksum)
         UDP_data= struct.Struct('I I 32s')
         UDP_Packet = UDP_data.pack(*resp)
+        Network_Delay()
         sock.sendto(UDP_Packet, addr)
         print("Response being sent:",resp)
         sock.sendto(UDP_Packet,addr)
